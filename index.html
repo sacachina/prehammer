@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>佳士得紐約三月「Max N. Berry」專場｜唐三彩拍前共識（內部內測）</title>
+  <style>
+    :root{
+      --text:#111;
+      --muted:#666;
+      --line:#e6e6e6;
+      --bg:#fafafa;
+      --card:#fff;
+      --ok:#0a7f2e;
+      --warn:#b00020;
+    }
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      line-height:1.55;
+    }
+    .wrap{ max-width:980px; margin:0 auto; padding:28px 18px 44px; }
+    header{ margin-bottom:18px; }
+    h1{ font-size:26px; margin:0 0 6px 0; letter-spacing:.2px; }
+    .sub{ margin:0; color:var(--muted); font-size:14px; }
+
+    .topRow{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-top:10px; }
+    .badge{
+      font-size:12px; color:#111; border:1px solid var(--line); background:#fff;
+      border-radius:999px; padding:7px 10px; display:inline-flex; align-items:center; gap:8px;
+    }
+    .dot{ width:7px; height:7px; border-radius:50%; background:#111; animation:pulse 1.2s infinite; }
+    @keyframes pulse{ 0%{transform:scale(1);opacity:.35} 50%{transform:scale(1.35);opacity:.9} 100%{transform:scale(1);opacity:.35} }
+
+    .grid{ display:grid; grid-template-columns:1fr; gap:16px; margin-top:18px; }
+    @media (min-width: 900px){ .grid{ grid-template-columns:1fr 1fr; } }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow:0 2px 10px rgba(0,0,0,.04);
+      display:flex;
+      flex-direction:column;
+    }
+
+    .imgBox{ width:100%; height:420px; background:#f0f0f0; overflow:hidden; }
+    @media (min-width: 900px){ .imgBox{ height:460px; } }
+    .imgBox img{ width:100%; height:100%; object-fit:cover; object-position:center 35%; display:block; }
+
+    .content{ padding:16px 16px 14px; }
+    .title{ font-size:18px; margin:0 0 8px 0; letter-spacing:.2px; }
+    .meta{ font-size:13px; color:var(--muted); margin:0 0 12px 0; }
+    .meta b{ color:var(--text); font-weight:600; }
+
+    .pillRow{ display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+    .pill{ font-size:12px; border:1px solid var(--line); border-radius:999px; padding:6px 10px; background:#fff; }
+
+    .voteBox{ border-top:1px solid var(--line); padding:12px 16px 14px; }
+    .voteTitle{ font-size:13px; margin:0 0 10px 0; font-weight:600; }
+
+    .btn{
+      width:100%;
+      padding:11px 12px;
+      border-radius:10px;
+      border:1px solid #111;
+      background:#fff;
+      color:#111;
+      font-size:14px;
+      cursor:pointer;
+      margin:7px 0;
+      transition:transform .05s ease, background .12s ease, opacity .12s ease;
+    }
+    .btn.primary{ background:#111; color:#fff; }
+    .btn:active{ transform:translateY(1px); }
+    .btn[disabled]{ cursor:not-allowed; opacity:.45; }
+
+    .result{
+      margin-top:10px;
+      font-size:13px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:10px;
+      background:#fcfcfc;
+      display:none;
+      animation:pop .18s ease-out;
+    }
+    @keyframes pop{ from{ transform:translateY(6px); opacity:0; } to{ transform:translateY(0); opacity:1; } }
+
+    .bar{ height:8px; background:#eee; border-radius:999px; overflow:hidden; margin:6px 0 10px; }
+    .bar > div{ height:100%; background:#111; width:0%; transition:width .25s ease; }
+
+    .rows{ margin-top:8px; }
+    .row{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      padding:6px 0;
+      border-top:1px dashed #eaeaea;
+    }
+    .row:first-child{ border-top:0; }
+    .row b{ font-weight:600; }
+
+    /* Name gating */
+    .inlineRow{ display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 6px; }
+    .input{
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:10px 10px;
+      font-size:13px;
+      background:#fff;
+      outline:none;
+      flex:1;
+      min-width:220px;
+    }
+    .hint{ font-size:12px; color:var(--muted); margin:6px 0 0; }
+    .warn{ color:var(--warn); font-size:12px; margin:8px 0 0; display:none; }
+
+    /* Slider */
+    .sliderWrap{
+      border:1px solid #ececec;
+      background:#fff;
+      border-radius:12px;
+      padding:10px 10px 12px;
+      margin-top:10px;
+    }
+    .sliderHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:8px;
+    }
+    .sliderTitle{ font-size:12px; font-weight:700; color:#111; }
+    .sliderValue{ font-size:12px; color:var(--muted); }
+    input[type="range"]{ width:100%; }
+    .scale{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      font-size:11px;
+      color:#888;
+      margin-top:6px;
+    }
+
+    /* Chart hover tooltip */
+    .chartWrap{ margin-top:10px; border-top:1px solid #e9e9e9; padding-top:10px; position:relative; }
+    .chartHead{ display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:8px; }
+    .chartTitle{ font-size:12px; color:#222; font-weight:600; display:flex; align-items:center; gap:6px; }
+    .sparkLabel{ font-size:12px; color:var(--muted); white-space:nowrap; }
+    canvas{ width:100%; height:120px; display:block; background:#fff; border:1px solid #eaeaea; border-radius:10px; }
+    .tooltip{
+      position:absolute;
+      pointer-events:none;
+      display:none;
+      background:#111;
+      color:#fff;
+      font-size:12px;
+      padding:7px 8px;
+      border-radius:10px;
+      white-space:nowrap;
+      transform:translate(-50%, -115%);
+      box-shadow:0 6px 16px rgba(0,0,0,.18);
+    }
+    .crosshair{
+      position:absolute;
+      top:44px;
+      bottom:14px;
+      width:1px;
+      background:rgba(17,17,17,.25);
+      display:none;
+      pointer-events:none;
+    }
+
+    .small{ font-size:12px; color:var(--muted); margin-top:10px; }
+
+    /* Panels */
+    .panel{
+      margin-top:16px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:14px;
+      box-shadow:0 2px 10px rgba(0,0,0,.04);
+      padding:14px 14px 16px;
+    }
+    .panel h2{ font-size:15px; margin:0 0 10px 0; letter-spacing:.2px; }
+    .panel .metaLine{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:8px 0 10px; }
+    .chip{ font-size:12px; border:1px solid var(--line); border-radius:999px; padding:6px 10px; background:#fff; color:#111; display:inline-flex; align-items:center; gap:8px; }
+    .statusDot{ width:7px; height:7px; border-radius:50%; background:var(--ok); animation:pulse 1.2s infinite; }
+    .analysisBox{ border:1px solid #ececec; border-radius:12px; background:#fcfcfc; padding:12px 12px 10px; }
+    .analysisTitle{ font-size:12px; font-weight:700; color:#111; margin:0 0 6px 0; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .analysisBody{ font-size:13px; color:#222; margin:0; white-space:pre-line; }
+    .analysisHint{ font-size:12px; color:var(--muted); margin-top:8px; }
+
+    /* Comments */
+    .commentForm{ display:grid; grid-template-columns: 180px 1fr auto; gap:10px; margin-top:10px; }
+    @media (max-width: 720px){ .commentForm{ grid-template-columns: 1fr; } }
+    select, textarea{
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:10px 10px;
+      font-size:13px;
+      background:#fff;
+      outline:none;
+    }
+    textarea{ min-height:44px; resize:vertical; }
+    .sendBtn{
+      border:1px solid #111;
+      background:#111;
+      color:#fff;
+      border-radius:10px;
+      padding:10px 12px;
+      font-size:13px;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .sendBtn:active{ transform:translateY(1px); }
+    .commentList{ margin-top:12px; border-top:1px solid #eee; padding-top:10px; display:flex; flex-direction:column; gap:10px; }
+    .comment{ border:1px solid #efefef; background:#fff; border-radius:12px; padding:10px 10px; }
+    .commentHead{ display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:6px; font-size:12px; color:var(--muted); }
+    .commentHead b{ color:#111; font-weight:700; }
+    .commentBody{ font-size:13px; color:#111; margin:0; white-space:pre-wrap; word-break:break-word; }
+    .commentTools{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+
+    footer{
+      margin-top:18px;
+      color:var(--muted);
+      font-size:12px;
+      border-top:1px solid var(--line);
+      padding-top:14px;
+    }
+    .link{ color:#111; text-decoration:underline; text-underline-offset:2px; }
+  
+  /* Comments: fixed height + scroll */
+  #commentList{ max-height: 320px; overflow-y: auto; padding-right: 6px; }
+
+  /* Auction Notes: render as cards without touching core logic */
+  #notesList{
+    list-style:none;
+    padding:0;
+    margin:0;
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:14px;
+  }
+  #notesList li{ margin:0; }
+  #notesList .noteCard{
+    display:block;
+    text-decoration:none;
+    color:var(--text);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+    background:#fff;
+    box-shadow:0 2px 10px rgba(0,0,0,.04);
+  }
+  #notesList .noteThumb{
+    width:100%;
+    height:140px;
+    background:#f0f0f0;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#9aa0a6;
+    font-size:12px;
+  }
+  #notesList .noteThumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  #notesList .noteTitle{
+    padding:10px 12px 12px;
+    font-size:13px;
+    line-height:1.45;
+  }
+
+
+  @media (max-width: 720px){
+    #notesList{ grid-template-columns:1fr; }
+  }
+
+
+/* --- Auction Note Modal (isolated; does NOT affect voting/comments) --- */
+#noteModal{ position:fixed; inset:0; z-index:9999; }
+#noteModal .mask{ position:absolute; inset:0; background:rgba(0,0,0,.45); }
+#noteModal .box{
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:min(900px, 92vw); max-height:86vh; overflow:auto;
+  background:#fff; border-radius:16px; padding:18px 18px 16px;
+  box-shadow:0 10px 40px rgba(0,0,0,.25);
+}
+#noteModal .head{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+#noteModal .title{ font-size:16px; font-weight:700; line-height:1.35; margin:0; letter-spacing:.2px; }
+#noteModal .close{ border:1px solid var(--line); background:#fff; border-radius:10px; padding:6px 10px; cursor:pointer; }
+#noteModal .meta{ display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 12px; }
+#noteModal .tag{
+  font-size:12px; color:#111; background:#f5f5f5; border:1px solid #eee;
+  padding:4px 8px; border-radius:999px;
+}
+#noteModal .excerpt{ font-size:13px; line-height:1.65; color:#222; white-space:pre-wrap; }
+#noteModal .foot{ display:flex; justify-content:flex-end; gap:10px; margin-top:14px; flex-wrap:wrap; }
+#noteModal .btn{
+  display:inline-block; border:1px solid var(--line); background:#fff; border-radius:10px;
+  padding:8px 12px; font-size:13px; text-decoration:none; color:var(--text);
+}
+#noteModal .btn.primary{ background:#111; color:#fff; border-color:#111; }
+
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<header>
+  <h1>佳士得紐約三月「Max N. Berry」專場｜唐三彩拍前共識</h1>
+  <p class="sub">即時聚合拍前判斷｜拍後 24 小時內公開對照結果（內部內測通道）</p>
+  <div class="topRow">
+    <span class="badge"><span class="dot"></span><span id="countdown">拍賣倒數：計算中…</span></span>
+    <span class="badge">專場：Important Chinese Art｜拍賣日：2026-03-26（紐約）</span>
+    <span class="badge">當前身份：<b id="whoAmI">未設定姓名</b></span>
+  </div>
+</header>
+
+<div class="grid">
+
+  <!-- Lot 1 -->
+  <article class="card" data-lot="lot1">
+    <div class="imgBox">
+      <img
+        src="https://www.christies.com/-/jssmedia/images/features/articles/2025/in-the-frame/jon-gries/75023119_2400-dotcom-jpeg.jpg?mw=3200&mh=3200&hash=02b23de5c19c8eba206f7a5ebbe49091674eda5f"
+        alt="唐 三彩藍釉與三彩仕女俑一對"
+        loading="lazy">
+    </div>
+    <div class="content">
+      <h2 class="title">唐 三彩藍釉與三彩仕女俑一對</h2>
+      <p class="meta">
+        <b>唐代（618–907）</b>｜最高 15 1/2 in（約 39.4 cm）｜Composite stand<br>
+        估價：<b>USD 50,000–80,000</b>｜Christie’s New York｜2026-03-26
+      </p>
+      <div class="pillRow">
+        <span class="pill">仕女一對</span>
+        <span class="pill">藍釉 + 三彩</span>
+        <span class="pill">拍前共識追蹤</span>
+      </div>
+    </div>
+
+    <div class="voteBox">
+      <p class="voteTitle">你的預測（先輸入姓名後才可投票）</p>
+
+      <div class="inlineRow">
+        <input class="input" id="nameInput" type="text" placeholder="輸入你的名字（例：Allen / 小林 / Chen）" maxlength="30" oninput="saveNameFrom(1)">
+      </div>
+
+      <div class="warn" id="warn-lot1">請先輸入名字。</div>
+      <div class="warn" id="lock-lot1">你已投過票（本拍品僅能投一次）。</div>
+
+      <!-- 只保留：流拍 -->
+      <button class="btn voteBtn" data-lot="lot1" onclick="voteBucket('lot1','流拍')" disabled>流拍</button>
+
+      <!-- 只保留：滑動條（最高 5,000,000） -->
+      <div class="sliderWrap">
+        <div class="sliderHead">
+          <div class="sliderTitle">自定成交價（USD）</div>
+          <div class="sliderValue">目標：<b id="sliderVal-lot1">100,000</b></div>
+        </div>
+        <input type="range" id="slider-lot1" min="50000" max="5000000" step="10000" value="100000" oninput="updateSlider('lot1')">
+        <div class="scale">
+          <span>50k</span><span>500k</span><span>2M</span><span>5M</span>
+        </div>
+        <button class="btn primary voteBtn" data-lot="lot1" onclick="votePrice('lot1')" disabled>投票：以上目標價成交</button>
+        <div class="hint">提示：用滑桿調整你的預測成交價，然後按一次投票即可。</div>
+      </div>
+
+      <div class="result" id="lot1-result"></div>
+      <div class="small">圖片來源：Christie’s story page（見頁尾連結）。</div>
+    </div>
+  </article>
+
+  <!-- Lot 2 -->
+  <article class="card" data-lot="lot2">
+    <div class="imgBox">
+      <img
+        src="https://www.christies.com/-/jssmedia/images/features/articles/2025/12/berry/74957286_dotcom-2400.jpg?mw=3200&mh=3200&hash=8a2b98b8eb7527eb747cbea1b414b5bba3b55f1d"
+        alt="唐 三彩彩繪女馬球手俑"
+        loading="lazy">
+    </div>
+    <div class="content">
+      <h2 class="title">極罕見｜唐 三彩彩繪女馬球手俑</h2>
+      <p class="meta">
+        <b>唐代（618–907）</b>｜13¾ in（34.6 cm）<br>
+        估價：<b>USD 80,000–120,000</b>｜Christie’s New York｜2026-03-26
+      </p>
+      <div class="pillRow">
+        <span class="pill">女馬球手</span>
+        <span class="pill">彩繪 + 三彩</span>
+        <span class="pill">馬球罕見</span>
+      </div>
+    </div>
+
+    <div class="voteBox">
+      <p class="voteTitle">你的預測（先輸入姓名後才可投票）</p>
+
+      <div class="inlineRow">
+        <input class="input" id="nameInput2" type="text" placeholder="輸入你的名字（例：Allen / 小林 / Chen）" maxlength="30" oninput="saveNameFrom(2)">
+      </div>
+
+      <div class="warn" id="warn-lot2">請先輸入名字。</div>
+      <div class="warn" id="lock-lot2">你已投過票（本拍品僅能投一次）。</div>
+
+      <!-- 只保留：流拍 -->
+      <button class="btn voteBtn" data-lot="lot2" onclick="voteBucket('lot2','流拍')" disabled>流拍</button>
+
+      <!-- 只保留：滑動條（最高 5,000,000） -->
+      <div class="sliderWrap">
+        <div class="sliderHead">
+          <div class="sliderTitle">自定成交價（USD）</div>
+          <div class="sliderValue">目標：<b id="sliderVal-lot2">150,000</b></div>
+        </div>
+        <input type="range" id="slider-lot2" min="80000" max="5000000" step="10000" value="150000" oninput="updateSlider('lot2')">
+        <div class="scale">
+          <span>80k</span><span>500k</span><span>2M</span><span>5M</span>
+        </div>
+        <button class="btn primary voteBtn" data-lot="lot2" onclick="votePrice('lot2')" disabled>投票：以上目標價成交</button>
+        <div class="hint">提示：用滑桿調整你的預測成交價，然後按一次投票即可。</div>
+      </div>
+
+      <div class="result" id="lot2-result"></div>
+      <div class="small">圖片來源：Christie’s story page（見頁尾連結）。</div>
+    </div>
+  </article>
+
+</div>
+
+<section class="panel" id="analysisPanel">
+  <h2>即時形勢分析（AI 生成｜高敏感）</h2>
+  <div class="metaLine">
+    <span class="chip"><span class="statusDot"></span><span id="analysisLive">實時更新中</span></span>
+    <span class="chip" id="analysisStamp">最近更新：—</span>
+    <span class="chip" id="heatChip">熱度：低（近 20 秒 0 票）</span>
+  </div>
+  <div class="analysisBox">
+    <div class="analysisTitle">
+      <span>綜合判讀</span>
+      <span style="font-size:12px;color:var(--muted);">走勢 / 反轉 / 熱度</span>
+    </div>
+    <p class="analysisBody" id="analysisText">尚未有足夠投票資料。輸入姓名後投票，系統會即刻回饋“方向/熱度/反轉”。</p>
+    <div class="analysisHint">說明：此為前端規則化生成（內測）。</div>
+  </div>
+</section>
+
+<section class="panel" id="commentPanel">
+  <h2>評論區（免註冊｜即時更新）</h2>
+  <div class="metaLine">
+    <span class="chip">總評論數：<b id="commentCount">0</b></span>
+    <span class="chip">最新更新：<span id="commentStamp">—</span></span>
+    <span class="chip">發言身份：<b id="commentWho">未設定姓名</b></span>
+  </div>
+
+  <div class="commentForm">
+    <select id="commentLot">
+      <option value="lot1">針對：仕女一對（Lot 1）</option>
+      <option value="lot2">針對：女馬球手（Lot 2）</option>
+      <option value="all">針對：整體/專場</option>
+    </select>
+    <textarea id="commentText" placeholder="寫下你的判斷（請保持專業、就事論事）"></textarea>
+    <button class="sendBtn" onclick="submitComment()">發表</button>
+  </div>
+
+  <div class="warn" id="commentWarn">請先輸入名字，且評論至少 3 個字。</div>
+
+  <div class="commentList" id="commentList"></div>
+    <!-- Latest Auction Notes (artsaca.com) -->
+    <div class="card" id="notesBox" style="margin-top:14px;">
+      <div class="row" style="align-items:center; justify-content:space-between; gap:12px;">
+        <div>
+          <div class="h2">拍賣資料庫｜最新動態</div>
+          <div class="muted" style="margin-top:4px;">近期香港與國際重要拍賣成交與流拍記錄</div>
+        </div>
+        <button class="btn ghost" id="notesRefreshBtn" type="button">刷新</button>
+      </div>
+      <div class="muted" id="notesWarn" style="margin-top:10px; display:none;"></div>
+      <div style="margin-top:10px;">
+        <ol id="notesList" style="margin:0; padding-left:18px;"></ol>
+      </div>
+    </div>
+
+
+</section>
+
+<footer>
+  本頁僅聚合拍前判斷，不構成投資建議。<br>
+  預測結構與歷史對照方法由 <b>artsaca.com</b> 研究體系支持。<br><br>
+  圖片來源頁：<a class="link" href="https://www.christies.com/en/stories/max-berry-maxims-for-collecting-1f4fb6c829b340cabf5e4e2bd46f2495" target="_blank" rel="noopener">Christie’s｜Max N. Berry shares his maxims for building collections</a>
+</footer>
+
+</div>
+
+<script>
+  // 特權名字：可重複投票（精確匹配）
+  const ADMIN_NAME = '王秋生';
+
+  // 內容規範（可自行擴充）
+  const BLOCKED_NAME_TOKENS = [];
+  const PROFANITY_TOKENS = ['傻','蠢','垃圾','廢物','滾','去死','媽的','他媽','操','屌','婊','畜生'];
+
+  function containsAnyToken(text, tokens){
+    const t = (text || '').toLowerCase();
+    return tokens.some(tok => tok && t.includes(tok.toLowerCase()));
+  }
+  function validateDisplayName(name){
+    const n = (name || '').trim();
+    if(!n) return { ok:false, msg:'請先輸入名字。' };
+    if(n.length > 30) return { ok:false, msg:'名字過長，請縮短。' };
+    if(containsAnyToken(n, BLOCKED_NAME_TOKENS)) return { ok:false, msg:'此姓名不可用，請更換。' };
+    if(containsAnyToken(n, PROFANITY_TOKENS)) return { ok:false, msg:'名字含不當字詞，請更換。' };
+    return { ok:true, msg:'' };
+  }
+  function validateComment(text){
+    const s = (text || '').trim();
+    if(s.length < 3) return { ok:false, msg:'評論至少 3 個字。' };
+    if(containsAnyToken(s, BLOCKED_NAME_TOKENS)) return { ok:false, msg:'評論包含不允許的人名/稱謂，請修改。' };
+    if(containsAnyToken(s, PROFANITY_TOKENS)) return { ok:false, msg:'評論包含不當言詞，請保持專業。' };
+    return { ok:true, msg:'' };
+  }
+
+  // 統計：流拍 + 價格（價格投票採「加權分佈」展示）
+  const state = {
+    lot1:{ unsold:0, priceVotes:[] },
+    lot2:{ unsold:0, priceVotes:[] }
+  };
+
+  // 走勢：共識價格（中位數）+ 流拍比例
+  const series = { lot1: [], lot2: [] };
+
+  // 投票歷史（撤回用）
+  const history = { lot1: [], lot2: [] };
+
+
+  /* =========================
+     Cloudflare Pages API (KV-backed)
+     ========================= */
+  const API = { state: "/state", vote: "/vote", comment: "/comment" };
+  window.__serverComments = [];
+
+  async function apiGetState(){
+    const r = await fetch(API.state, { cache: "no-store" });
+    return r.json();
+  }
+  async function apiVote(payload){
+    const r = await fetch(API.vote, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    return r.json();
+  }
+  async function apiComment(payload){
+    const r = await fetch(API.comment, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    return r.json();
+  }
+
+  function applyServerState(serverState){
+    try{
+      if(!serverState || !serverState.lots) return;
+
+      // Sync lots
+      state.lot1.unsold = Number(serverState.lots.lot1?.unsold || 0);
+      state.lot1.priceVotes = Array.isArray(serverState.lots.lot1?.prices) ? serverState.lots.lot1.prices : [];
+      series.lot1 = Array.isArray(serverState.lots.lot1?.series) ? serverState.lots.lot1.series : [];
+
+      state.lot2.unsold = Number(serverState.lots.lot2?.unsold || 0);
+      state.lot2.priceVotes = Array.isArray(serverState.lots.lot2?.prices) ? serverState.lots.lot2.prices : [];
+      series.lot2 = Array.isArray(serverState.lots.lot2?.series) ? serverState.lots.lot2.series : [];
+
+      // Sync comments
+      window.__serverComments = Array.isArray(serverState.comments) ? serverState.comments : [];
+
+      // Render
+      render("lot1");
+      render("lot2");
+      renderCommentsFromServer();
+    }catch(e){
+      console.error("applyServerState error:", e);
+    }
+  }
+
+  async function syncLoop(){
+    try{
+      const j = await apiGetState();
+      if(j && j.ok) applyServerState(j.state);
+    }catch(e){
+      console.error("syncLoop error:", e);
+    }
+  }
+
+  // Name gating
+  const NAME_KEY = 'hs_name_v7';
+  function getName(){ return (localStorage.getItem(NAME_KEY) || '').trim(); }
+  function syncNameInputs(v){
+    const a = document.getElementById('nameInput');
+    const b = document.getElementById('nameInput2');
+    if(a && a.value !== v) a.value = v;
+    if(b && b.value !== v) b.value = v;
+  }
+  function setNameUI(name){
+    document.getElementById('whoAmI').textContent = name ? name : '未設定姓名';
+    document.getElementById('commentWho').textContent = name ? name : '未設定姓名';
+
+    // 不顯示“管理員可重複投票”等字樣（按你的要求）
+    const btns = document.querySelectorAll('.voteBtn');
+    btns.forEach(b => b.disabled = !name);
+
+    refreshVoteLocks();
+    updateAnalysis({ trigger:'idle' });
+
+  // 啟動多人同步（每 2 秒拉取一次）
+  setInterval(syncLoop, 2000);
+  // Auction notes
+  const __btn = document.getElementById('notesRefreshBtn');
+  if(__btn) __btn.addEventListener('click', loadAuctionNotes);
+  setInterval(loadAuctionNotes, 10*60*1000);
+}
+  function saveNameFrom(which){
+    const el = which===2 ? document.getElementById('nameInput2') : document.getElementById('nameInput');
+    const v = (el.value || '').trim().slice(0,30);
+    const vr = validateDisplayName(v);
+    if(!vr.ok){
+      localStorage.setItem(NAME_KEY, '');
+      syncNameInputs(v);
+      setNameUI('');
+      const cw = document.getElementById('commentWarn');
+      cw.textContent = vr.msg;
+      cw.style.display = 'block';
+      return;
+    }
+    localStorage.setItem(NAME_KEY, v);
+    syncNameInputs(v);
+    const cw = document.getElementById('commentWarn');
+    cw.style.display = 'none';
+    cw.textContent = '請先輸入名字，且評論至少 3 個字。';
+    setNameUI(v);
+  }
+  (function initName(){
+    const v = getName();
+    syncNameInputs(v);
+    setNameUI(v);
+  })();
+
+  // Device lock（每端一票/每拍品）
+  function cryptoRandomId(){
+    try{
+      const arr = new Uint8Array(3);
+      crypto.getRandomValues(arr);
+      return Array.from(arr).map(b=>b.toString(16).padStart(2,'0')).join('');
+    }catch(e){
+      return Math.random().toString(16).slice(2,8);
+    }
+  }
+  function deviceKey(){
+    const k = 'hs_device_id_v1';
+    let id = localStorage.getItem(k);
+    if(!id){
+      id = cryptoRandomId() + cryptoRandomId() + cryptoRandomId();
+      localStorage.setItem(k, id);
+    }
+    return id;
+  }
+  function lockKey(lot){ return `hs_vote_lock_${deviceKey()}_${lot}_v2`; }
+  function hasVoted(lot){ return localStorage.getItem(lockKey(lot)) === '1'; }
+  function setVoted(lot){ localStorage.setItem(lockKey(lot), '1'); }
+  function clearVoted(lot){ localStorage.removeItem(lockKey(lot)); }
+  function showLock(lot, on){
+    const el = document.getElementById('lock-' + lot);
+    if(el) el.style.display = on ? 'block' : 'none';
+  }
+  function setLotButtonsEnabled(lot, enabled){
+    document.querySelectorAll(`.voteBtn[data-lot="${lot}"]`).forEach(btn=>{
+      btn.disabled = !enabled;
+    });
+  }
+  function refreshVoteLocks(){
+    const name = getName();
+    if(!name) return;
+    const isAdmin = (name === ADMIN_NAME);
+
+    if(isAdmin){
+      showLock('lot1', false); showLock('lot2', false);
+      setLotButtonsEnabled('lot1', true); setLotButtonsEnabled('lot2', true);
+      return;
+    }
+    const l1 = hasVoted('lot1');
+    const l2 = hasVoted('lot2');
+    showLock('lot1', l1); showLock('lot2', l2);
+    setLotButtonsEnabled('lot1', !l1);
+    setLotButtonsEnabled('lot2', !l2);
+  }
+
+  // Slider display
+  function updateSlider(lot){
+    const el = document.getElementById(`slider-${lot}`);
+    const out = document.getElementById(`sliderVal-${lot}`);
+    if(!el || !out) return;
+    out.textContent = Number(el.value).toLocaleString('en-US');
+  }
+  updateSlider('lot1'); updateSlider('lot2');
+
+  // Predictions store (for later "closest winner")
+  const PRED_KEY = 'hs_predictions_v7';
+  function loadPreds(){ try{ return JSON.parse(localStorage.getItem(PRED_KEY) || '[]'); }catch(e){ return []; } }
+  function savePreds(list){ localStorage.setItem(PRED_KEY, JSON.stringify(list)); }
+
+  function showWarn(lot, on){
+    const el = document.getElementById('warn-' + lot);
+    if(el) el.style.display = on ? 'block' : 'none';
+  }
+
+  // Heat
+  const voteTimestamps = [];
+  function recordHeat(){
+    const now = Date.now();
+    voteTimestamps.push(now);
+    const windowMs = 20000;
+    while(voteTimestamps.length && (now - voteTimestamps[0]) > windowMs) voteTimestamps.shift();
+    const c = voteTimestamps.length;
+
+    let label = '低';
+    if(c >= 18) label = '爆';
+    else if(c >= 12) label = '高';
+    else if(c >= 6) label = '中';
+
+    document.getElementById('heatChip').textContent = `熱度：${label}（近 20 秒 ${c} 票）`;
+  }
+
+  // Vote: Unsold (server-backed)
+  async function voteBucket(lot, bucket){
+    const name = getName();
+    const vr = validateDisplayName(name);
+    if(!vr.ok){ showWarn(lot, true); return; }
+
+    showWarn(lot, false);
+
+    const res = await apiVote({ lot, type:"UNSOLD", price:null, name });
+
+    if(!res || !res.ok){
+      if(res && res.error === "ALREADY_VOTED"){
+        showLock(lot, true);
+        refreshVoteLocks();
+        return;
+      }
+      alert("投票失敗：" + (res && res.error ? res.error : "未知錯誤"));
+      return;
+    }
+
+    applyServerState(res.state);
+    recordHeat();
+    updateAnalysis({ trigger:'vote_unsold', lot });
+    refreshVoteLocks();
+
+    // 保險：再拉一次最新狀態（避免偶發延遲）
+    }
+
+
+  // Vote: Price (slider) (server-backed)
+  async function votePrice(lot){
+    const name = getName();
+    const vr = validateDisplayName(name);
+    if(!vr.ok){ showWarn(lot, true); return; }
+
+    const slider = document.getElementById(`slider-${lot}`);
+    const price = slider ? Number(slider.value) : null;
+    if(!price){ showWarn(lot, true); return; }
+
+    showWarn(lot, false);
+
+    const res = await apiVote({ lot, type:"PRICE", price, name });
+
+    if(!res || !res.ok){
+      if(res && res.error === "ALREADY_VOTED"){
+        showLock(lot, true);
+        refreshVoteLocks();
+        return;
+      }
+      alert("投票失敗：" + (res && res.error ? res.error : "未知錯誤"));
+      return;
+    }
+
+    applyServerState(res.state);
+    recordHeat();
+    updateAnalysis({ trigger:'vote_price', lot, price });
+    refreshVoteLocks();
+
+    }
+
+
+  // Chart series point = median price (or 0 if none), plus unsold share
+  function median(arr){
+    if(!arr || !arr.length) return null;
+    const a = [...arr].sort((x,y)=>x-y);
+    const mid = Math.floor(a.length/2);
+    return (a.length%2) ? a[mid] : (a[mid-1]+a[mid])/2;
+  }
+
+  function render(lot){
+    const el = document.getElementById(lot + '-result');
+    if(!el) return;
+
+    const uns = state[lot].unsold;
+    const pv = state[lot].priceVotes;
+    const total = uns + pv.length;
+
+    const m = median(pv);
+    const unsPct = total ? (uns/total*100) : 0;
+
+    // Update series: use a "consensus metric" 0-100 for chart = (1 - unsPct) * normalized-median? -> instead show two charts? keep one: unsold% trend
+    // To keep Polymarket feel: we plot "成交可能性" = 100 - 流拍比例
+    const settleProb = total ? (100 - unsPct) : 0;
+    // 走勢：優先使用後端回傳的 series；若後端仍為空，前端暫時補一個點維持即時體感
+    if(!Array.isArray(series[lot])) series[lot] = [];
+    if(series[lot].length === 0){
+      series[lot].push({ ts: Date.now(), v: settleProb });
+    }
+
+    el.style.display = 'block';
+
+    const canvasId = `${lot}-chart`;
+    const tipId = `${lot}-tip`;
+    const crossId = `${lot}-cross`;
+
+    const priceText = (m===null) ? '—' : `${Math.round(m).toLocaleString('en-US')} USD`;
+    const probText = total ? `${settleProb.toFixed(1)}%` : '—';
+
+    el.innerHTML = `
+      <div><b>盤面指標：</b>成交可能性 ${probText} ｜ 流拍比例 ${unsPct.toFixed(1)}% ｜ 價格中位數 ${priceText}</div>
+      <div class="bar"><div style="width:${Math.max(0, Math.min(100, settleProb))}%"></div></div>
+      <div class="rows">
+        <div class="row"><div>流拍</div><div><b>${unsPct.toFixed(1)}%</b>（${uns}）</div></div>
+        <div class="row"><div>價格投票</div><div><b>${total ? (pv.length/total*100).toFixed(1) : '0.0'}%</b>（${pv.length}）</div></div>
+      </div>
+
+      <div class="chartWrap" id="${lot}-chartWrap">
+        <div class="chartHead">
+          <div class="chartTitle">📈 走勢（成交可能性，滑鼠回看）</div>
+          <div class="sparkLabel">最新：${total ? settleProb.toFixed(1) : '0.0'}%</div>
+        </div>
+        <div class="tooltip" id="${tipId}"></div>
+        <div class="crosshair" id="${crossId}"></div>
+        <canvas id="${canvasId}" width="900" height="240"></canvas>
+      </div>
+    `;
+
+    drawLineChart(canvasId, series[lot]);
+    attachHoverScrub(lot);
+
+    // Update “AI” response more敏感
+    updateAnalysis({ trigger:'render', lot, settleProb, unsPct, median:m });
+  }
+
+  function drawLineChart(canvasId, data){
+    const canvas = document.getElementById(canvasId);
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0,0,W,H);
+
+    const padL=42, padR=12, padT=14, padB=26;
+    const x0=padL, y0=padT, x1=W-padR, y1=H-padB;
+
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0,0,W,H);
+
+    ctx.strokeStyle = '#e8e8e8';
+    ctx.lineWidth = 1;
+    const levels=[0,25,50,75,100];
+    levels.forEach(v=>{
+      const y = y1 - (v/100)*(y1-y0);
+      ctx.beginPath(); ctx.moveTo(x0,y); ctx.lineTo(x1,y); ctx.stroke();
+      ctx.fillStyle = '#777';
+      ctx.font = '12px -apple-system,BlinkMacSystemFont,"PingFang TC",sans-serif';
+      ctx.fillText(`${v}%`, 8, y+4);
+    });
+
+    if(!data || data.length < 2){
+      ctx.fillStyle='#666';
+      ctx.font='12px -apple-system,BlinkMacSystemFont,"PingFang TC",sans-serif';
+      ctx.fillText('需要更多投票才會形成走勢', x0, y0+14);
+      if(data && data.length===1){
+        const py = y1 - (data[0].v/100)*(y1-y0);
+        ctx.fillStyle='#111';
+        ctx.beginPath(); ctx.arc(x0, py, 3.5, 0, Math.PI*2); ctx.fill();
+      }
+      return;
+    }
+
+    const n=data.length;
+    const xStep=(x1-x0)/(n-1);
+
+    ctx.strokeStyle='#111';
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    data.forEach((p,i)=>{
+      const x=x0+i*xStep;
+      const y=y1-(p.v/100)*(y1-y0);
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+
+    const last=data[n-1];
+    const lx=x0+(n-1)*xStep;
+    const ly=y1-(last.v/100)*(y1-y0);
+    ctx.fillStyle='#111';
+    ctx.beginPath(); ctx.arc(lx, ly, 4, 0, Math.PI*2); ctx.fill();
+  }
+
+  function attachHoverScrub(lot){
+    const wrap = document.getElementById(`${lot}-chartWrap`);
+    const canvas = document.getElementById(`${lot}-chart`);
+    const tip = document.getElementById(`${lot}-tip`);
+    const cross = document.getElementById(`${lot}-cross`);
+    if(!wrap || !canvas || !tip || !cross) return;
+
+    const data = series[lot] || [];
+    if(data.length < 2) return;
+
+    const padL=42, padR=12;
+    const W = canvas.width;
+    const x0 = padL, x1 = W - padR;
+
+    function showAt(clientX){
+      const rect = canvas.getBoundingClientRect();
+      const px = (clientX - rect.left) * (canvas.width / rect.width);
+      const clamped = Math.max(x0, Math.min(x1, px));
+      const t = (clamped - x0) / (x1 - x0);
+      const idx = Math.round(t * (data.length - 1));
+      const p = data[idx];
+      if(!p) return;
+
+      const wrapRect = wrap.getBoundingClientRect();
+      const crossX = (clamped / canvas.width) * rect.width;
+      cross.style.display = 'block';
+      cross.style.left = `${rect.left - wrapRect.left + crossX}px`;
+
+      tip.style.display = 'block';
+      tip.textContent = `${formatTime(p.ts)}｜成交可能性 ${p.v.toFixed(1)}%`;
+      tip.style.left = `${rect.left - wrapRect.left + crossX}px`;
+      tip.style.top = `44px`;
+
+      updateAnalysis({ trigger:'scrub', lot, snapshot:p, idx });
+    }
+
+    canvas.onmousemove = (e)=>showAt(e.clientX);
+    canvas.onmouseenter = (e)=>showAt(e.clientX);
+    canvas.onmouseleave = ()=>{
+      tip.style.display='none';
+      cross.style.display='none';
+      updateAnalysis({ trigger:'idle' });
+
+  // 啟動多人同步（每 2 秒拉取一次）
+  setInterval(syncLoop, 2000);
+  };
+  }
+
+  // Countdown
+  const auctionUTC = Date.parse('2026-03-26T14:00:00Z');
+  function tick(){
+    const now=Date.now();
+    let diff=auctionUTC-now;
+    const el=document.getElementById('countdown');
+    if(!el) return;
+
+    if(diff<=0){
+      el.textContent='拍賣倒數：已到拍賣日（等待結果公布）';
+      return;
+    }
+    const d=Math.floor(diff/86400000); diff-=d*86400000;
+    const h=Math.floor(diff/3600000);  diff-=h*3600000;
+    const m=Math.floor(diff/60000);    diff-=m*60000;
+    const s=Math.floor(diff/1000);
+    const pad=(n)=>String(n).padStart(2,'0');
+    el.textContent=`拍賣倒數：${d} 天 ${pad(h)}:${pad(m)}:${pad(s)}`;
+  }
+  tick();
+  setInterval(tick, 250);
+
+  // Comments
+  const COMMENTS_KEY = 'hs_comments_v7';
+  const COMMENTS_PING = 'hs_comments_ping_v7';
+
+  function loadComments(){
+    try{ const raw = localStorage.getItem(COMMENTS_KEY); return raw ? JSON.parse(raw) : []; }
+    catch(e){ return []; }
+  }
+  function saveComments(list){
+    localStorage.setItem(COMMENTS_KEY, JSON.stringify(list));
+    localStorage.setItem(COMMENTS_PING, String(Date.now()));
+  }
+  function sanitizeText(s){
+    return (s || '').replace(/[\u0000-\u001F\u007F]/g, '').trim().slice(0, 800);
+  }
+  function lotLabel(lot){
+    if(lot==='lot1') return '仕女一對';
+    if(lot==='lot2') return '女馬球手';
+    return '整體/專場';
+  }
+  function formatTime(ts){
+    const d = new Date(ts);
+    const pad=(n)=>String(n).padStart(2,'0');
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  }
+  function escapeHtml(s){
+    return (s||'')
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;')
+      .replaceAll("'","&#39;");
+  }
+
+  async function submitComment(){
+    const name = getName();
+    const vr = validateDisplayName(name);
+    const lot = document.getElementById('commentLot').value;
+    const text = sanitizeText(document.getElementById('commentText').value);
+    const warn = document.getElementById('commentWarn');
+
+    if(!vr.ok){
+      warn.textContent = vr.msg;
+      warn.style.display='block';
+      return;
+    }
+    const cr = validateComment(text);
+    if(!cr.ok){
+      warn.textContent = cr.msg;
+      warn.style.display='block';
+      return;
+    }
+
+    warn.style.display='none';
+    warn.textContent = '請先輸入名字，且評論至少 3 個字。';
+
+    const res = await apiComment({ lot, name, text });
+    if(!res || !res.ok){
+      alert("評論失敗：" + (res && res.error ? res.error : "未知錯誤"));
+      return;
+    }
+
+    document.getElementById('commentText').value = '';
+    applyServerState(res.state);
+
+    // 保險再同步一次
+    }
+
+  function renderCommentsFromServer(){
+    const list = window.__serverComments || [];
+    document.getElementById('commentCount').textContent = String(list.length);
+    document.getElementById('commentStamp').textContent = list.length ? formatTime(list[list.length-1].ts) : '—';
+
+    const items = [...list].sort((a,b)=>b.ts - a.ts).slice(0, 80);
+    const container = document.getElementById('commentList');
+
+    container.innerHTML = items.map(item => `
+      <div class="comment">
+        <div class="commentHead">
+          <div><b>${escapeHtml(item.name)}</b>｜<b>${lotLabel(item.lot)}</b>｜${formatTime(item.ts)}</div>
+          <div style="color:#999;">#${item.id}</div>
+        </div>
+        <p class="commentBody">${escapeHtml(item.text)}</p>
+      </div>
+    `).join('') || `<div class="comment"><div class="commentHead"><b>尚無評論</b></div><p class="commentBody">輸入姓名後即可直接發表。</p></div>`;
+  }
+
+  // 本地 storage 同步停用：多人模式以 /state 為準
+
+  // “AI” analysis：高敏感、每次投票即刻反應（不做任何“斷線”演示）
+  function updateAnalysis(ctx = {}){
+    const now = Date.now();
+    document.getElementById('analysisStamp').textContent = `最近更新：${formatTime(now)}`;
+
+    const heatText = document.getElementById('heatChip').textContent || '';
+    const heatLevel = heatText.includes('爆') ? '爆' : heatText.includes('高') ? '高' : heatText.includes('中') ? '中' : '低';
+
+    const lines = [];
+    if(ctx.trigger === 'vote_price'){
+      const lotName = ctx.lot==='lot1' ? 'Lot 1（仕女一對）' : 'Lot 2（女馬球手）';
+      lines.push(`【即時反應】${lotName} 出現價格投票：${Number(ctx.price).toLocaleString('en-US')} USD。`);
+      if(heatLevel==='高' || heatLevel==='爆') lines.push(`【熱度】短時間投票密集，敘事易被快速錨定；留意走勢是否出現單邊加速。`);
+      else lines.push(`【節奏】目前熱度 ${heatLevel}，更像“理性聚合”而非情緒擁擠。`);
+    } else if(ctx.trigger === 'vote_unsold'){
+      const lotName = ctx.lot==='lot1' ? 'Lot 1（仕女一對）' : 'Lot 2（女馬球手）';
+      lines.push(`【即時反應】${lotName} 出現流拍投票。`);
+      if(heatLevel==='高' || heatLevel==='爆') lines.push(`【熱度】在高熱度下出現“流拍”訊號，通常代表分歧擴大；關注接下來是否迅速被反向投票修正。`);
+      else lines.push(`【結構】低熱度下的“流拍”更多是保守預期，需等待更多樣本。`);
+    } else if(ctx.trigger === 'scrub' && ctx.snapshot){
+      lines.push(`【回看】${formatTime(ctx.snapshot.ts)}｜成交可能性 ${ctx.snapshot.v.toFixed(1)}%`);
+      lines.push(`【用法】用來判斷“共識形成速度”與“反轉成本”。`);
+    } else {
+      lines.push(`【狀態】輸入姓名後投票，系統會即刻回饋“方向/熱度/反轉”。`);
+      lines.push(`【熱度】${document.getElementById('heatChip').textContent}`);
+    }
+
+    document.getElementById('analysisText').textContent = lines.join('\n');
+  }
+
+
+
+  /* =========================
+     Latest Auction Notes (artsaca.com)
+     Endpoint: GET /notes?limit=6
+     ========================= */
+  function shortenTitle(t, maxLen=120){
+    const s = (t || "").trim();
+    return s.length > maxLen ? (s.slice(0, maxLen-1) + "…") : s;
+  }
+
+  async function loadAuctionNotes(){
+    const warn = document.getElementById("notesWarn");
+    const list = document.getElementById("notesList");
+    if(!warn || !list) return;
+
+    warn.style.display = "none";
+    warn.textContent = "";
+    list.innerHTML = "";
+
+    try{
+      const r = await fetch(`/notes?limit=6&ts=${Date.now()}`, { cache: "no-store" });
+      const j = await r.json();
+
+      if(!j || !j.ok){
+        warn.textContent = "抓取失敗：" + (j && j.error ? j.error : "未知錯誤");
+        warn.style.display = "block";
+        return;
+      }
+
+      const items = Array.isArray(j.items) ? j.items : [];
+      if(items.length === 0){
+        warn.textContent = "已連線，但未取得文章列表（items 為空）。";
+        warn.style.display = "block";
+        return;
+      }
+
+      list.innerHTML = items.map(it => {
+        const title = shortenTitle(it.title || "");
+        const url = it.url || "#";
+        return `<li style="margin:8px 0;"><a href="${url}" target="_blank" rel="noopener">${escapeHtml(title)}</a></li>`;
+      }).join("");
+
+    }catch(e){
+      warn.textContent = "抓取失敗（/notes 尚未部署或回傳非 JSON）。";
+      warn.style.display = "block";
+      console.error("loadAuctionNotes error:", e);
+    }
+  }
+
+  // 初始化
+  render('lot1');
+  render('lot2');
+  renderCommentsFromServer();
+  refreshVoteLocks();
+  updateSlider('lot1');
+  updateSlider('lot2');
+  updateAnalysis({ trigger:'idle' });
+
+  // 啟動多人同步（每 2 秒拉取一次）
+  setInterval(syncLoop, 2000);
+  </script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof init === "function") init();
+  if (typeof syncLoop === "function") syncLoop();
+
+  // 延迟加载拍卖资料，避免影响主逻辑
+  setTimeout(() => {
+    if (typeof loadAuctionNotes === "function") {
+      loadAuctionNotes();
+    }
+  }, 600);
+});
+</script>
+
+
+
+<script>
+/* Auction Notes (isolated) - 2 columns / 6 items / modal summary
+   Requires: backend Functions endpoint
+   - GET /notes?limit=6  -> {ok:true, items:[{slug, url, normTitle, image, house, year, status, price}]}
+   - GET /notes?slug=auction314 -> {ok:true, note:{normTitle, excerpt, house, year, status, price, url}}
+*/
+function showNoteModal(){
+  const m = document.getElementById("noteModal");
+  if(!m) return;
+  m.style.display = "block";
+  m.setAttribute("aria-hidden","false");
+}
+function hideNoteModal(){
+  const m = document.getElementById("noteModal");
+  if(!m) return;
+  m.style.display = "none";
+  m.setAttribute("aria-hidden","true");
+}
+function setNoteModalLoading(){
+  document.getElementById("noteModalTitle").textContent = "載入中…";
+  document.getElementById("noteModalMeta").innerHTML = "";
+  document.getElementById("noteModalExcerpt").textContent = "";
+  const read = document.getElementById("noteModalRead");
+  if(read) read.href = "#";
+}
+function renderNoteModal(note){
+  document.getElementById("noteModalTitle").textContent = note.normTitle || note.title || "";
+  const meta = document.getElementById("noteModalMeta");
+  meta.innerHTML = "";
+  const tags = [];
+  if(note.house) tags.push(`拍賣行：${note.house}`);
+  if(note.year) tags.push(`年份：${note.year}`);
+  if(note.status) tags.push(`結果：${note.status}`);
+  if(note.price) tags.push(`價格：${note.price}`);
+  tags.forEach(t=>{
+    const s = document.createElement("span");
+    s.className = "tag";
+    s.textContent = t;
+    meta.appendChild(s);
+  });
+  document.getElementById("noteModalExcerpt").textContent = note.excerpt || "（未抓到摘要）";
+  const read = document.getElementById("noteModalRead");
+  if(read) read.href = note.url || "#";
+}
+async function openNoteModal(slug){
+  setNoteModalLoading();
+  showNoteModal();
+  try{
+    const r = await fetch(`/notes?slug=${encodeURIComponent(slug)}&ts=${Date.now()}`, { cache:"no-store" });
+    const ct = (r.headers.get("content-type") || "").toLowerCase();
+    const txt = await r.text();
+    if(!ct.includes("application/json")){
+      throw new Error("NON_JSON");
+    }
+    const j = JSON.parse(txt);
+    if(!j || !j.ok || !j.note){
+      throw new Error("BAD_JSON");
+    }
+    renderNoteModal(j.note);
+  }catch(e){
+    document.getElementById("noteModalTitle").textContent = "摘要載入失敗";
+    document.getElementById("noteModalExcerpt").textContent = "請確認 /functions/notes.js 已部署，且 /notes 未被 SPA 回退規則重寫成首頁。";
+  }
+}
+
+async function loadAuctionNotes(){
+  const warn = document.getElementById("notesWarn");
+  const list = document.getElementById("notesList");
+  if(!warn || !list) return;
+
+  warn.style.display = "none";
+  warn.textContent = "";
+  list.innerHTML = "";
+
+  try{
+    const r = await fetch(`/notes?limit=6&ts=${Date.now()}`, { cache: "no-store" });
+    const ct = (r.headers.get("content-type") || "").toLowerCase();
+    const txt = await r.text();
+
+    if(!ct.includes("application/json")){
+      throw new Error("NON_JSON");
+    }
+    const j = JSON.parse(txt);
+
+    if(!j || !j.ok){
+      warn.textContent = "抓取失敗：" + (j && j.error ? j.error : "未知錯誤");
+      warn.style.display = "block";
+      return;
+    }
+
+    const items = Array.isArray(j.items) ? j.items : [];
+    if(items.length === 0){
+      warn.textContent = "已連線，但未取得文章列表（items 為空）。";
+      warn.style.display = "block";
+      return;
+    }
+
+    list.innerHTML = items.map(it => {
+      const slug = (it.slug || "").trim();
+      const url = it.url || "#";
+      const title = (it.normTitle || it.title || slug || "").trim();
+      const img = (it.image || "").trim();
+
+      const thumb = img
+        ? `<div class="noteThumb"><img src="${img}" alt="${escapeHtml(title)}" loading="lazy" referrerpolicy="no-referrer"></div>`
+        : `<div class="noteThumb">Auction Note</div>`;
+
+      return `<li>
+        <a class="noteCard" href="${url}" data-slug="${escapeHtml(slug)}">
+          ${thumb}
+          <div class="noteTitle">${escapeHtml(title)}</div>
+        </a>
+      </li>`;
+    }).join("");
+
+    // Intercept card click -> modal
+    list.querySelectorAll("a.noteCard[data-slug]").forEach(a=>{
+      a.addEventListener("click", (ev)=>{
+        ev.preventDefault();
+        const slug = a.getAttribute("data-slug") || "";
+        if(slug) openNoteModal(slug);
+      });
+    });
+
+  }catch(e){
+    warn.textContent = "抓取失敗（/notes 回傳非 JSON 或被阻擋）。";
+    warn.style.display = "block";
+    console.error("loadAuctionNotes error:", e);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // modal close wiring
+  const m = document.getElementById("noteModal");
+  if(m){
+    const closeAll = ()=>hideNoteModal();
+    m.querySelector(".mask")?.addEventListener("click", closeAll);
+    document.getElementById("noteModalClose")?.addEventListener("click", closeAll);
+    document.getElementById("noteModalOk")?.addEventListener("click", closeAll);
+    document.addEventListener("keydown", (e)=>{ if(e.key==="Escape") closeAll(); });
+  }
+
+  // Load once, and bind refresh button
+  const btn = document.getElementById("notesRefreshBtn");
+  if(btn) btn.addEventListener("click", loadAuctionNotes);
+  setTimeout(()=>{ try{ loadAuctionNotes(); }catch(_){} }, 600);
+});
+</script>
+<div id="noteModal" aria-hidden="true" style="display:none;">
+  <div class="mask"></div>
+  <div class="box" role="dialog" aria-modal="true" aria-labelledby="noteModalTitle">
+    <div class="head">
+      <h3 class="title" id="noteModalTitle">載入中…</h3>
+      <button class="close" id="noteModalClose" type="button">關閉</button>
+    </div>
+    <div class="meta" id="noteModalMeta"></div>
+    <div class="excerpt" id="noteModalExcerpt"></div>
+    <div class="foot">
+      <a class="btn" id="noteModalRead" href="#" target="_blank" rel="noopener">閱讀全文（新窗口）</a>
+      <button class="btn primary" id="noteModalOk" type="button">完成</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
