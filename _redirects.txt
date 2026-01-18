@@ -1,0 +1,6 @@
+/notes*    /notes*    200
+/state*    /state*    200
+/vote*     /vote*     200
+/comment*  /comment*  200
+
+/*         /index.html 200
